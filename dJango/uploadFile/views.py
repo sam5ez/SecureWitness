@@ -14,7 +14,7 @@ def upload_file(request):
         if form.is_valid():
             # file is saved
             form.save()
-            return HttpResponseRedirect('/success_upload/'+form.data.get('title'))
+            return HttpResponseRedirect('/successful_upload/'+form.data.get('title')+'/')
     else:
         form = ReportForm()
     return render(request, 'upload_page.html', {'form': form})
@@ -23,18 +23,11 @@ def upload_file(request):
 def report_page(request, tag):
     r_list = Report.objects.filter(tag=tag)
     context = {'tag': tag, 'report_list': r_list}
-    return render(request, 'reportView.html', context)
+    return render(request, 'report_view.html', context)
 
 
-def success_upload(request, title, tittle2):
+def successful_upload(request, title):
     r_list = Report.objects.filter(title=title)
     r = r_list[0]
     context = {'tag': r.tag, 'title': title, 'sub_date': r.sub_date}
-    return render(request, 'success.html', context)
-
-def show_report(request, title):
-    r_list = Report.objects.filter(title=title)
-    r = r_list[0]
-    context = {'tag': r.tag, 'title': title, 'sub_date': r.sub_date}
-    return render(request,'reportView.html', context)
-    pass
+    return render(request, 'successful_upload.html', context)
