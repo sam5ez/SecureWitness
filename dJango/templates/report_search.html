@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Report Search</title>
+</head>
+<body>
+<h1>Search by fields</h1>
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Submit"/></p>
+</form>
+</body>
+</html>
