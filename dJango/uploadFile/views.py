@@ -15,7 +15,8 @@ def upload_file(request):
         if form.is_valid():
             # file is saved
             form.save()
-            return HttpResponseRedirect('/successful_upload/' + form.data.get('title') + '/')
+            # return HttpResponseRedirect('/successful_upload/' + form.data.get('title') + '/')
+            return successful_upload(request=request, title=form.data.get('title'))
     else:
         form = ReportForm()
     return render(request, 'upload_page.html', {'form': form})
