@@ -1,11 +1,7 @@
 from django.shortcuts import render
-from .models import Report
 from django.db.models import Q
-# Create your views here.
-
-
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from .models import Report
 from .forms import ReportForm, SearchForm
 
 
@@ -15,18 +11,13 @@ def upload_file(request):
         if form.is_valid():
             # file is saved
             form.save()
-            # return HttpResponseRedirect('/successful_upload/' + form.data.get('title') + '/')
-            return successful_upload(request=request, title=form.data.get('title'))
+            context = {'success': True, 'form': form}
+        else:
+            context = {'success': False, 'form': form}
+        return render(request, 'upload_result.html', context)
     else:
         form = ReportForm()
     return render(request, 'upload_page.html', {'form': form})
-
-
-def successful_upload(request, title):
-    r_list = Report.objects.filter(title=title)
-    r = r_list[0]
-    context = {'tag': r.tag, 'title': title, 'sub_date': r.sub_date}
-    return render(request, 'successful_upload.html', context)
 
 
 def search_file(request):
@@ -44,7 +35,7 @@ def search_file(request):
             context = {'report_list': r_list, 'valid': True}
         else:
             context = {'report_list': [], 'valid': False}
+        return render(request, 'report_view.html', context)
     else:
         form = SearchForm()
         return render(request, 'report_search.html', {'form': form})
-    return render(request, 'report_view.html', context)
