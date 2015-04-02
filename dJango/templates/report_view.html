@@ -1,38 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>File Search Result</title>
-</head>
-<body>
-<h1>Search Result</h1>
-{% if valid %}
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Submission Date</th>
-            <th>Short Description</th>
-            <th>Detailed Description</th>
-            <th>Location</th>
-            <th>Tag</th>
-            {% for report in report_list %}
-                <tr>
-                    <td>{{ report.title }}</td>
-                    <td>{{ report.sub_date }}</td>
-                    <td>{{ report.short_desc }}</td>
-                    <td>{{ report.detailed_desc }}</td>
-                    <td>{{ report.location }}</td>
-                    <td>{{ report.tag }}</td>
-                </tr>
-            {% endfor %}
-    </table>
-{% else %}
-    <p>Invalid search. Please try again.</p>
-{% endif %}
-<p>
-    Return to <a href="/search/">search</a> page.
-</p>
+{% extends base.html %}
 
+{% block content %}
 
-</body>
-</html>
+    <h1>Search Result</h1>
+    {% if valid %}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Submission Date</th>
+                <th>Short Description</th>
+                <th>Detailed Description</th>
+                <th>Location</th>
+                <th>Tag</th>
+                {% for report in report_list %}
+                    <tr>
+                        <td>{{ report.title }}</td>
+                        <td>{{ report.sub_date }}</td>
+                        <td>{{ report.short_desc }}</td>
+                        <td>{{ report.detailed_desc }}</td>
+                        <td>{{ report.location }}</td>
+                        <td>{{ report.tag }}</td>
+                    </tr>
+                {% endfor %}
+        </table>
+        <p>The end of search result.</p>
+    {% else %}
+        <p>Invalid search. Please try again.</p>
+    {% endif %}
+    <p>
+        Return to <a href="/search/">search</a> page.
+    </p>
+
+{% endblock %}
