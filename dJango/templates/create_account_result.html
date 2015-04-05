@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if succeed %}
+        <p>Account {{ username }} is created. </p>
+    {% else %}
+        <p>Account Creation fail.</p>
+    {% endif %}
+{% endblock %}

@@ -1,14 +1,10 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% block content %}
 
-    	<form action="/login/auth/" method="post">{% csrf_token %}
-		<label for="username">User name:</label>
-		<input type="text" name="username" value="" id="username">
-		<label for="password">Password:</label>
-		<input type="password" name="password" value="" id="password">
-
-		<input type="submit" value="login" />
-
-	</form>
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p><input type="submit" value="Submit"/></p>
+</form>
 
 {% endblock %}
