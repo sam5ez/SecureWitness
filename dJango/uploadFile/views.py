@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from .models import Report
+from .models import Report, User
 from .forms import ReportForm, SearchForm
+from django import forms
 
 
 def upload_file(request):
@@ -10,6 +11,8 @@ def upload_file(request):
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
             # file is saved
+            form = form.save(commit=False)
+            form.reporter = request.user
             form.save()
             context = {'success': True, 'form': form}
         else:

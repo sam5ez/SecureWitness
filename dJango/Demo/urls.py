@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from uploadFile.views import upload_file, search_file
-from userAccount.views import create_account
+from userAccount.views import create_account, auth_view, user_home
 
 urlpatterns = patterns('',
                        # Examples:
@@ -11,4 +11,6 @@ urlpatterns = patterns('',
                        url(r'^upload/$', upload_file),
                        url(r'^search/$', search_file),
                        url(r'^create_account/$', create_account),
+                       url(r'^auth/$', auth_view),
+                       url(r'^user_home/$',user_home),
                        )
