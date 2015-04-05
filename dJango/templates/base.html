@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Secure Witness</title>
+    <style>
+        .navBar {
+            float: right;
+        }
+    </style>
 </head>
 <body>
+{% if user.is_authenticated %}
+    <div class="navBar">
+        <p>Hello, {{ user.username }}! </p>
+
+        <p><a href="/user_home/">Index</a></p>
+
+        <p><a href="/upload/">Upload Report</a></p>
+
+        <p><a href="/search/">Search Report</a></p>
+    </div>
+{% endif %}
+
 {% block content %}{% endblock %}
 </body>
 </html>

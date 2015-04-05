@@ -17,10 +17,10 @@ def upload_file(request):
             context = {'success': True, 'form': form}
         else:
             context = {'success': False, 'form': form}
-        return render(request, 'upload_result.html', context)
+        return render(request, 'report_upload_result.html', context)
     else:
         form = ReportForm()
-    return render(request, 'upload_page.html', {'form': form})
+    return render(request, 'report_upload.html', {'form': form})
 
 
 def search_file(request):
@@ -38,7 +38,7 @@ def search_file(request):
             context = {'report_list': r_list, 'valid': True}
         else:
             context = {'report_list': [], 'valid': False}
-        return render(request, 'report_view.html', context)
+        return render(request, 'report_search_result.html', context)
     else:
         form = SearchForm()
         return render(request, 'report_search.html', {'form': form})
