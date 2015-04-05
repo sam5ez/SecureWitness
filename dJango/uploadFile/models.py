@@ -12,6 +12,7 @@ class Report(models.Model):
     location = models.CharField(max_length=30, blank=True)
     file = models.FileField(upload_to="reports")
     tag = models.CharField(max_length=30, blank=True)
+    private = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
