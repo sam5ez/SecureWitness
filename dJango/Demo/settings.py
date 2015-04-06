@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'uploadFile',
+    'userAccount'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,6 +89,5 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-# ENV_PATH = os.path.abspath(os.path.dirname(__file__))
-MEDIA_ROOT = os.path.join(os.path.dirname(SITE_ROOT), 'storage')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+MEDIA_URL = '/storage/'
