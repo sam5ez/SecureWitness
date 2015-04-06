@@ -17,10 +17,10 @@ def create_account(request):
             email = form.cleaned_data['email']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
-                                     last_name=last_name)
-            if not User.last_login:
-                User.last_login = datetime.datetime.now()
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
+                                            last_name=last_name)
+            if not user.last_login:
+                user.last_login = datetime.datetime.now()
             context = {'username': username, 'succeed': True}
         else:
             context = {'form': form, 'succeed': False}
