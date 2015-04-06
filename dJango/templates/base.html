@@ -10,8 +10,9 @@
     </style>
 </head>
 <body>
-{% if user.is_authenticated %}
-    <div class="navBar">
+
+<div class="navBar">
+    {% if user.is_authenticated %}
         <p>Hello, {{ user.username }}! </p>
 
         <p><a href="/user_home/">Index</a></p>
@@ -19,9 +20,11 @@
         <p><a href="/upload/">Upload Report</a></p>
 
         <p><a href="/search/">Search Report</a></p>
-    </div>
-{% endif %}
 
+    {% else %}
+        <p>Please <a href="/auth/">login</a> first</p>
+    {% endif %}
+</div>
 {% block content %}{% endblock %}
 </body>
 </html>
