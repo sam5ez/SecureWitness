@@ -1,9 +1,11 @@
+import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .forms import CreateAccountForm, LoginForm
 from django.contrib import auth
-import datetime
+
+from .forms import CreateAccountForm, LoginForm
 
 
 def create_account(request):
@@ -16,7 +18,9 @@ def create_account(request):
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             User.objects.create_user(username=username, email=email, password=password, first_name=first_name,
-                                     last_name=last_name, last_login=datetime.datetime.now())
+                                     last_name=last_name)
+            if not User.last_login:
+                User.last_login = datetime.datetime.now()
             context = {'username': username, 'succeed': True}
         else:
             context = {'form': form, 'succeed': False}
