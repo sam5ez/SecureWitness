@@ -1,5 +1,11 @@
 from django.contrib import admin
-from . import models
 
-admin.site.register(models.Report)
-admin.site.register(models.User)
+from uploadFile import models
+
+
+class ReportAdmin(admin.ModelAdmin):
+    fields = ('title', 'short_desc', 'detailed_desc', 'location', 'file', 'tag', 'private')
+    list_display = ('title', 'private')
+
+
+admin.site.register(models.Report, ReportAdmin)

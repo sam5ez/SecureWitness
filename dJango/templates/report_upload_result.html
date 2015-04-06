@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-
     {% if success %}
         <h1>Report {{ form.title }} is successfully uploaded.</h1>
-
         <p>Submitted {{ form.sub_date|date:"F j, Y H:i" }}</p>
     {% else %}
         <h1>Fail to save report {{ form.title }}.</h1>
     {% endif %}
     Return to <a href="/upload/">upload</a> page.
-
 {% endblock %}
