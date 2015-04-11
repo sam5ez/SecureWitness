@@ -12,6 +12,7 @@
                 <th>Detailed Description</th>
                 <th>Location</th>
                 <th>Tag</th>
+                <th>Groups</th>
                 {% for report in report_list %}
                     <tr>
                         <td>{{ report.title }}</td>
@@ -20,6 +21,12 @@
                         <td>{{ report.detailed_desc }}</td>
                         <td>{{ report.location }}</td>
                         <td>{{ report.tag }}</td>
+                        <td>
+                            {#                            {% for group in report.groups.all %}#}
+                            {#                            <div>{{ g.name }}</div>#}
+                            {#                            {% endfor %}#}
+                            {{ report.groups.all }}
+                        </td>
                     </tr>
                 {% endfor %}
         </table>

@@ -6,6 +6,9 @@
         <p>Submitted {{ form.sub_date|date:"F j, Y H:i" }}</p>
     {% else %}
         <h1>Fail to save report {{ form.title }}.</h1>
+        {% for field in form %}
+              <p>{{ field.label_tag }} {{ field }}{{ field.errors }}</p>
+        {% endfor %}
     {% endif %}
     Return to <a href="/upload/">upload</a> page.
 {% endblock %}

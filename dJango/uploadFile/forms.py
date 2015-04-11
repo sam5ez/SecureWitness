@@ -1,17 +1,22 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Report
 from django.utils.translation import ugettext_lazy as _
+
+from .models import Report
 
 
 class ReportForm(ModelForm):
     class Meta:
         model = Report
-        fields = ['title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag', 'private']
+        fields = ['title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag', 'private', 'groups']
         labels = {
             "short_desc": _("Short Description"),
             "detailed_desc": _("Detailed Description"),
-            "private": _("Mark as private (only I can view this report)")
+            "private": _("Mark as private (only specified group and I can see the report)"),
+            "groups": _("Specify which group(s) can see the report")
+        }
+        widgets = {
+            'groups': forms.CheckboxSelectMultiple()
         }
 
 
