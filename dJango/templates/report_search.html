@@ -5,6 +5,6 @@
     <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <p><input type="submit" value="Submit"/></p>
+        <p>{% include "submit_button" %}</p>
     </form>
 {% endblock %}

@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-
     <h1>Search Result</h1>
     {% if valid %}
-        <table>
+        <table class="table table-hover">
             <tr>
                 <th>Title</th>
                 <th>Submission Date</th>
@@ -22,9 +21,6 @@
                         <td>{{ report.location }}</td>
                         <td>{{ report.tag }}</td>
                         <td>
-                            {#                            {% for group in report.groups.all %}#}
-                            {#                            <div>{{ g.name }}</div>#}
-                            {#                            {% endfor %}#}
                             {{ report.groups.all }}
                         </td>
                     </tr>

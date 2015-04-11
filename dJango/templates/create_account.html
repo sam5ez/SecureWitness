@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-
-<form enctype="multipart/form-data" method="post">
+<h1>Create an Account</h1>
+<form enctype="multipart/form-data" method="post" class="form-inline">
     {% csrf_token %}
     {{ form.as_p }}
-    <p><input type="submit" value="Submit"/></p>
+    <p>{% include "submit_button" %}</p>
 </form>
 
 {% endblock %}

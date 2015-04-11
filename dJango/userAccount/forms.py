@@ -8,7 +8,11 @@ class CreateAccountForm(ModelForm):
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
         widgets = {
-            'password': forms.PasswordInput()
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'})
         }
 
 
@@ -17,5 +21,6 @@ class LoginForm(ModelForm):
         model = User
         fields = ['username', 'password']
         widgets = {
-            'password': forms.PasswordInput()
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'})
         }

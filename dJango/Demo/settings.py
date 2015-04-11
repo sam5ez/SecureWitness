@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'uploadFile',
     'userAccount',
-    'bootstrap3'
 )
 
 MIDDLEWARE_CLASSES = (

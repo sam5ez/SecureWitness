@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>User Login</h1>
-    {% if user.is_authenticated %}
-        <p>You are currently logged in as {{ user.username }}.</p>
-        <p>Fill out this form if you want to switch user...</p>
-    {% endif %}
-    <p>{{ message }}</p>
-    <form enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="Submit"/></p>
-    </form>
-    <p>Don't have an account? <a href="/create_account/">Create an account</a>.</p>
+
+        <h1>User Login</h1>
+        {% if user.is_authenticated %}
+            <p>You are currently logged in as {{ user.username }}.</p>
+            <p>Fill out this form if you want to switch user...</p>
+        {% endif %}
+        <p>{{ message }}</p>
+
+        <form enctype="multipart/form-data" method="post" class="form-inline">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p>{% include "submit_button" %}</p>
+        </form>
+        <p>Don't have an account? <a href="/create_account/">Create an account</a>.</p>
+
 {% endblock %}

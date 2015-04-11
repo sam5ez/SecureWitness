@@ -46,9 +46,12 @@ def auth_view(request):
 
 
 def user_home(request):
-    return render(request, 'user_home.html', {})
+    return render(request, 'user_home.html', {'user': request.user})
 
 
 def logout(request):
-    auth.logout(request)
-    return render(request, "user_auth.html", {'form': LoginForm(), 'message': 'Successfully logged out.'})
+    if request.user.is_authenticated():
+        auth.logout(request)
+        return render(request, "user_auth.html", {'form': LoginForm(), 'message': 'Successfully logged out.'})
+    else:
+        return auth_view(request)

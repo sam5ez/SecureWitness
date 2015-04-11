@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Secure Witness</title>
-    <style>
-        .navBar {
-            float: right;
-        }
-    </style>
+    <link rel="stylesheet" type='text/css' href="{{ MEDIA_URL }}bootstrap.css"/>
+    {# don't know how to get static_url to work #}
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="sidebar col-md-3">
+            <ul class="nav nav-sidebar">
+                {% if user.is_authenticated %}
+                    <li><a>Hello, <strong>{{ user.username }}</strong>!</a></li>
+                    <li><a href="/user_home/">Homepage</a></li>
+                    <li><a href="/upload/">Upload Report</a></li>
+                    <li><a href="/search/">Search Report</a></li>
+                    <li><a href="/logout/">Logout</a></li>
+                {% else %}
+                    <li><a href="/auth/">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
 
-<div class="navBar">
-    {% if user.is_authenticated %}
-        <p>Hello, <em>{{ user.username }}!</em> </p>
-        <p><a href="/logout/">Logout</a></p>
-        <p><a href="/user_home/">Index</a></p>
-        <p><a href="/upload/">Upload Report</a></p>
-        <p><a href="/search/">Search Report</a></p>
+    </div>
 
-    {% else %}
-        <p>Please <a href="/auth/">login</a> first</p>
-    {% endif %}
 </div>
-{% block content %}{% endblock %}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
 </html>
