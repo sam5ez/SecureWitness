@@ -13,12 +13,10 @@
 
 <div class="navBar">
     {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! </p>
-
+        <p>Hello, <em>{{ user.username }}!</em> </p>
+        <p><a href="/logout/">Logout</a></p>
         <p><a href="/user_home/">Index</a></p>
-
         <p><a href="/upload/">Upload Report</a></p>
-
         <p><a href="/search/">Search Report</a></p>
 
     {% else %}

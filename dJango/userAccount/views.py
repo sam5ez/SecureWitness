@@ -47,3 +47,8 @@ def auth_view(request):
 
 def user_home(request):
     return render(request, 'user_home.html', {})
+
+
+def logout(request):
+    auth.logout(request)
+    return render(request, "user_auth.html", {'form': LoginForm(), 'message': 'Successfully logged out.'})
