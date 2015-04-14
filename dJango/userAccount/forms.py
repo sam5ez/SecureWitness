@@ -24,3 +24,13 @@ class LoginForm(ModelForm):
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'})
         }
+
+
+class CustomUserChangeForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'is_staff', 'groups']
+        widgets = {
+            'groups': forms.CheckboxSelectMultiple(),
+            'username': forms.HiddenInput()
+        }

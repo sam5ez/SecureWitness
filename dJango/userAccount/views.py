@@ -55,3 +55,44 @@ def logout(request):
         return render(request, "user_auth.html", {'form': LoginForm(), 'message': 'Successfully logged out.'})
     else:
         return auth_view(request)
+
+from .forms import CustomUserChangeForm
+
+
+def manage_user(request):
+    if not request.user.is_staff:
+        return render(request, "user_home.html", {'user': request.user})
+    else:
+        message = {}
+        user_list = User.objects.all()
+        if request.method == 'POST':
+            obj_user = list(User.objects.filter(username__exact=request.POST.get("username", "")))[0]
+            message['obj_name'] = obj_user.username
+            if '_confirm_delete' in request.POST:
+                obj_user.delete()
+                message['brief'] = "Success"
+                message['type'] = "info"
+                message['main'] = "This user has been deleted:"
+            change_form = CustomUserChangeForm(request.POST, instance=obj_user)
+            if change_form.is_valid():
+                if '_try_delete' in request.POST:
+                    message['type'] = "danger"
+                    message['brief'] = "Warning"
+                    message['main'] = "Are you sure you want to delete this user:"
+                    message['need_confirm'] = True
+                if '_edit' in request.POST:
+                    change_form.save()
+                    message['type'] = "success"
+                    message['brief'] = "Success"
+                    message['main'] = "This user has been updated:"
+                    # return render(request, "manage_user.html",{'message':})
+            else:  # form is invalid
+                message['type'] = "warning"
+                message['brief'] = "Error"
+                message['main'] = "There is some error processing your request..."
+        form_list = []
+        for user in user_list:
+            form = CustomUserChangeForm(instance=user)
+            form_list.append(form)
+        return render(request, "manage_user.html",
+                      {'form_list': form_list, 'message': message})

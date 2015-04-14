@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if not user.is_staff %}
+        <h2>Sorry, you are not an admin and you are not supposed to get to this page.</h2>
+    {% else %}
+        <h1>User List</h1>
+        {% if message %}
+            <div class="alert alert-{{ message.type }} alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <p><strong>{{ message.brief }}</strong> {{ message.main }} <em>{{ message.obj_name }}</em></p>
+                {% if message.need_confirm %}
+                    <p>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="username" value="{{ message.obj_name }}">
+                        <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
+                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+        <table class="table table-hover">
+            <tr>
+                <th>Username</th>
+                <th>Is Admin</th>
+                <th>Groups</th>
+                <th>Actions</th>
+            </tr>
+            {% for form in form_list %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <td> {{ form.username.value }}{{ form.username }}</td>
+                        <td>{{ form.is_staff }}</td>
+                        {#                        <td>{% for g in form.groups %}{{ g }}{% endfor %}</td>#}
+                        <td>{{ form.groups }}</td>
+                        <td><input type="submit" name="_edit" value="Save" class="btn btn-primary"/>
+                            <input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
+                        <td>{{ form.errors }}</td>
+                    </tr>
+                </form>
+            {% endfor %}
+        </table>
+        <p>The end of user list.</p>
+    {% endif %}
+{% endblock %}

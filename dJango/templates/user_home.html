@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>{{ user.username }}'s Home Page</h1>
-    <p>This page is currently an index. We can add more later (e.g. change password).</p>
-    <ul>
-        <li><a href="/upload/">Upload Report</a></li>
-        <li><a href="/search/">Search Report</a></li>
-        <li>Manage Report (create folder, delete report, etc.)</li>
-        <li>Other things in user requirement</li>
-    </ul>
+    {% if user.is_staff %}
+        You are an admin.
+        <ul>
+            {% include 'list_of_admin_user_operation.html' %}
+        </ul>
+    {% else %}
+        <p>You are a normal user.</p>
+        <ul>
+            {% include 'list_of_normal_user_operation.html' %}
+            <li>Manage Report (create folder, delete report, etc.)</li>
+            <li>Other things in user requirement</li>
+        </ul>
+    {% endif %}
 {% endblock %}
