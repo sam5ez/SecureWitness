@@ -1,3 +1,5 @@
+for command line:
+
 To Encrypt a File:
 --have encrypt.py and file to be encrypted in the same directory
 --run python encrypt.py <file to be encrypted> <encrypted output file name> <password> <keyfile file name>
@@ -19,3 +21,10 @@ decoded text
 
 should work with all file types
 the decryptor needs to know the file type in order to change it and use the file
+
+for gui:
+
+type the respective input and output filenames into the text boxes for the desired action
+click the button to perform the task
+created files will show up in folder
+needed files must be in the same folder
