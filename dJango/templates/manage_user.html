@@ -13,7 +13,7 @@
                     <p>
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <input type="hidden" name="username" value="{{ message.obj_name }}">
+                        <input type="hidden" name="username" value="{{ message.obj_name }}"/>
                         <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
                         <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
                     </form>

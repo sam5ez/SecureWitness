@@ -67,6 +67,7 @@ def manage_user(request):
         user_list = User.objects.all()
         if request.method == 'POST':
             obj_user = list(User.objects.filter(username__exact=request.POST.get("username", "")))[0]
+            print(request.POST)
             message['obj_name'] = obj_user.username
             if '_confirm_delete' in request.POST:
                 obj_user.delete()
@@ -78,7 +79,7 @@ def manage_user(request):
                 if '_try_delete' in request.POST:
                     message['type'] = "danger"
                     message['brief'] = "Warning"
-                    message['main'] = "Are you sure you want to delete this user:"
+                    message['main'] = "Are you sure you want to delete this user?"
                     message['need_confirm'] = True
                 if '_edit' in request.POST:
                     change_form.save()
@@ -95,4 +96,4 @@ def manage_user(request):
             form = CustomUserChangeForm(instance=user)
             form_list.append(form)
         return render(request, "manage_user.html",
-                      {'form_list': form_list, 'message': message})
+                      {'form_list': form_list, 'message': message, 'user': request.user})

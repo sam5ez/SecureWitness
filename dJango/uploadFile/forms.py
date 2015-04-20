@@ -37,3 +37,13 @@ class SearchForm(forms.Form):
                                   widget=forms.Textarea(attrs={'class': 'form-control'}))
     location = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     tag = forms.CharField(max_length=30, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class CustomReportChangeForm(ModelForm):
+    class Meta:
+        model = Report
+        fields = ['title', 'short_desc', 'detailed_desc', 'location', 'tag', 'private', 'groups']
+        widgets = {
+            'groups': forms.CheckboxSelectMultiple(),
+            'username': forms.HiddenInput()
+        }
