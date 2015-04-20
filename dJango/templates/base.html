@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Secure Witness</title>
+    <link rel="stylesheet" type='text/css' href="{{ MEDIA_URL }}bootstrap.css"/>
+    {# don't know how to get static_url to work #}
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="sidebar col-md-3">
+            <ul class="nav nav-sidebar">
+                {% if user.is_authenticated %}
+                    <li><a>Hello, <strong>{{ user.username }}</strong>!</a></li>
+                    <li><a href="/user_home/">Homepage</a></li>
+                    {% if user.is_staff %}
+                        {% include 'list_of_admin_user_operation.html' %}
+                    {% else %}
+                        {% include 'list_of_normal_user_operation.html' %}
+                    {% endif %}
+                    <li><a href="/logout/">Logout</a></li>
+                {% else %}
+                    <li><a href="/create_account/">Create Account</a></li>
+                    <li><a href="/auth/">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<script src="{{ MEDIA_URL }}jquery-2.1.3.min.js"></script>
+<script src="{{ MEDIA_URL }}bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Search Result</h1>
+    {% if valid %}
+        <table class="table table-hover">
+            <tr>
+                <th>Title</th>
+                <th>Submission Date</th>
+                <th>Short Description</th>
+                <th>Detailed Description</th>
+                <th>Location</th>
+                <th>Tag</th>
+                <th>Groups</th>
+                {% for report in report_list %}
+                    <tr>
+                        <td><a href={{ report.file.url }}>{{ report.title }}</a></td>
+                        <td>{{ report.sub_date }}</td>
+                        <td>{{ report.short_desc }}</td>
+                        <td>{{ report.detailed_desc }}</td>
+                        <td>{{ report.location }}</td>
+                        <td>{{ report.tag }}</td>
+                        <td>
+                            {{ report.groups.all }}
+                        </td>
+                    </tr>
+                {% endfor %}
+        </table>
+        <p>The end of search result.</p>
+    {% else %}
+        <p>Invalid search. Please try again.</p>
+    {% endif %}
+    <p>
+        Return to <a href="/search/">search</a> page.
+    </p>
+
+{% endblock %}
