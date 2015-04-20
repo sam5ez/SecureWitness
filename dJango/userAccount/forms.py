@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
 
 class CreateAccountForm(ModelForm):
@@ -34,3 +35,44 @@ class CustomUserChangeForm(ModelForm):
             'groups': forms.CheckboxSelectMultiple(),
             'username': forms.HiddenInput()
         }
+
+
+class CustomGroupChangeForm(ModelForm):
+    user_list = forms.ModelMultipleChoiceField(queryset=User.objects.all(),
+                                               widget=FilteredSelectMultiple('Users', False),
+                                               required=False)
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        if instance is not None:
+            initial = kwargs.get('initial', {})
+            initial['user_list'] = instance.user_set.all()
+            kwargs['initial'] = initial
+        super(CustomGroupChangeForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        group = super(CustomGroupChangeForm, self).save(commit=commit)
+        if commit:
+            group.user_set = self.cleaned_data['user_list']
+        else:
+            old_save_m2m = self.save_m2m
+
+            def new_save_m2m():
+                old_save_m2m()
+                group.user_set = self.cleaned_data['user_list']
+
+            self.save_m2m = new_save_m2m
+        return group
+
+    class Meta:
+        model = Group
+        fields = ['name']
+        widgets = {
+            'name': forms.HiddenInput()
+        }
+
+
+class GroupCreationForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name']

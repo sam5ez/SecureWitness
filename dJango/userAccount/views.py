@@ -2,10 +2,10 @@ import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
-from .forms import CreateAccountForm, LoginForm
+from .forms import CreateAccountForm, LoginForm, GroupCreationForm
 
 
 def create_account(request):
@@ -56,7 +56,8 @@ def logout(request):
     else:
         return auth_view(request)
 
-from .forms import CustomUserChangeForm
+
+from .forms import CustomUserChangeForm, CustomGroupChangeForm
 
 
 def manage_user(request):
@@ -66,34 +67,91 @@ def manage_user(request):
         message = {}
         user_list = User.objects.all()
         if request.method == 'POST':
-            obj_user = list(User.objects.filter(username__exact=request.POST.get("username", "")))[0]
-            print(request.POST)
-            message['obj_name'] = obj_user.username
+            l = list(User.objects.filter(username__exact=request.POST.get("username", "")))
+            obj_user = None
+            if len(l) != 0:
+                obj_user = l[0]
+                message['obj_name'] = obj_user.username
+
             if '_confirm_delete' in request.POST:
                 obj_user.delete()
                 message['brief'] = "Success"
                 message['type'] = "info"
                 message['main'] = "This user has been deleted:"
-            change_form = CustomUserChangeForm(request.POST, instance=obj_user)
-            if change_form.is_valid():
-                if '_try_delete' in request.POST:
-                    message['type'] = "danger"
-                    message['brief'] = "Warning"
-                    message['main'] = "Are you sure you want to delete this user?"
-                    message['need_confirm'] = True
-                if '_edit' in request.POST:
-                    change_form.save()
-                    message['type'] = "success"
-                    message['brief'] = "Success"
-                    message['main'] = "This user has been updated:"
-                    # return render(request, "manage_user.html",{'message':})
-            else:  # form is invalid
-                message['type'] = "warning"
-                message['brief'] = "Error"
-                message['main'] = "There is some error processing your request..."
+            else:
+                change_form = CustomUserChangeForm(request.POST, instance=obj_user)
+                if change_form.is_valid():
+                    if '_try_delete' in request.POST:
+                        message['type'] = "danger"
+                        message['brief'] = "Warning"
+                        message['main'] = "Are you sure you want to delete this user?"
+                        message['need_confirm'] = True
+                    if '_edit' in request.POST:
+                        change_form.save()
+                        message['type'] = "success"
+                        message['brief'] = "Success"
+                        message['main'] = "This user has been updated:"
+                else:  # form is invalid
+                    message['type'] = "warning"
+                    message['brief'] = "Error"
+                    message['main'] = "There is some error processing your request..."
         form_list = []
         for user in user_list:
             form = CustomUserChangeForm(instance=user)
             form_list.append(form)
         return render(request, "manage_user.html",
                       {'form_list': form_list, 'message': message, 'user': request.user})
+
+
+def manage_group(request):
+    if not request.user.is_staff:
+        return render(request, "user_home.html", {'user': request.user})
+    else:
+        message = {}
+        group_list = Group.objects.all()
+        if request.method == 'POST':
+            l = list(Group.objects.filter(name__exact=request.POST.get("name", "")))
+            obj_group = None
+            if len(l) != 0:
+                obj_group = l[0]
+                message['obj_name'] = obj_group.name
+            if '_create' in request.POST:
+                creation_form = GroupCreationForm(request.POST)
+                if creation_form.is_valid():
+                    creation_form.save()
+                    message['type'] = "success"
+                    message['brief'] = "Success"
+                    message['main'] = "This group has been created:"
+                else:
+                    message['type'] = "warning"
+                    message['brief'] = "Error"
+                    message['main'] = "There is some error creating the group..."
+            elif '_confirm_delete' in request.POST:
+                obj_group.delete()
+                message['type'] = "info"
+                message['brief'] = "Success"
+                message['main'] = "This group has been deleted:"
+            else:
+                change_form = CustomGroupChangeForm(request.POST, instance=obj_group)
+                if change_form.is_valid():
+                    if '_try_delete' in request.POST:
+                        message['type'] = "danger"
+                        message['brief'] = "Warning"
+                        message['main'] = "Are you sure you want to delete this group:"
+                        message['need_confirm'] = True
+                    if '_save' in request.POST:
+                        change_form.save()
+                        message['type'] = "success"
+                        message['brief'] = "Success"
+                        message['main'] = "This group has been updated:"
+                else:  # form is invalid
+                    message['type'] = "warning"
+                    message['brief'] = "Error"
+                    message['main'] = "There is some error processing your request..."
+        form_list = []
+        for group in group_list:
+            form = CustomGroupChangeForm(instance=group)
+            form_list.append(form)
+        return render(request, "manage_group.html",
+                      {'form_list': form_list, 'message': message, 'user': request.user,
+                       'group_creation_form': GroupCreationForm()})

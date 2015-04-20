@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if not user.is_staff %}
+        <h2>Sorry, you are not an admin and you are not supposed to get to this page.</h2>
+    {% else %}
+        <h1>Group List</h1>
+        {% if message %}
+            <div class="alert alert-{{ message.type }} alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <p><strong>{{ message.brief }}</strong> {{ message.main }} <em>{{ message.obj_name }}</em></p>
+                {% if message.need_confirm %}
+                    <p>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="name" value="{{ message.obj_name }}"/>
+                        <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
+                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+        <table class="table table-hover">
+            <tr>
+                <th>Group Name</th>
+                <th>Users</th>
+                <th>Actions</th>
+            </tr>
+            {% for form in form_list %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <tr>
+                        <td>{{ form.name }}{{ form.name.value }}</td>
+                        <td>{{ form.user_list }}</td>
+                        <td><input type="submit" name="_save" value="Save" class="btn btn-primary"/>
+                            <input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
+                        <td>{{ form.errors }}</td>
+                    </tr>
+                </form>
+            {% endfor %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <tr>
+                    <td>{{ group_creation_form.name }}</td>
+                    <td></td>
+                    <td><input type="submit" name="_create" value="Create" class="btn btn-success"/></td>
+                    <td>{{ form.errors }}</td>
+                </tr>
+            </form>
+        </table>
+        <p>The end of user list.</p>
+    {% endif %}
+{% endblock %}
+
+
+{#<link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css" />#}
