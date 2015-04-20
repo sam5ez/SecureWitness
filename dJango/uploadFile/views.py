@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 from .models import Report
 from .forms import ReportForm, SearchForm, CustomReportChangeForm
-from django.contrib import auth
-
-
 
 
 def upload_file(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         # form.reporter = request.user
@@ -28,6 +28,8 @@ def upload_file(request):
 
 
 def search_file(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -50,39 +52,41 @@ def search_file(request):
 
 
 def my_reports(request):
-        reports = []
-        message = {}
-        #user = request.user.username
-        if request.method == 'POST':
-            rep = Report.objects.get(title=request.POST.get("title", ""))
-            message['rep_name'] = rep.title
-            if '_confirm_delete' in request.POST:
-                rep.delete()
-                print("DELETED")
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
+    reports = []
+    message = {}
+    # user = request.user.username
+    if request.method == 'POST':
+        rep = Report.objects.get(title=request.POST.get("title", ""))
+        message['rep_name'] = rep.title
+        if '_confirm_delete' in request.POST:
+            rep.delete()
+            print("DELETED")
+            message['brief'] = "Success"
+            message['type'] = "info"
+            message['main'] = "This report has been deleted:"
+        change_form = CustomReportChangeForm(request.POST, instance=rep)
+        if change_form.is_valid():
+            if '_try_delete' in request.POST:
+                #rep.delete()
+                print("DELETING")
+                message['type'] = "danger"
+                message['brief'] = "Warning"
+                message['main'] = "Are you sure you want to delete this report?"
+                message['need_confirm'] = True
+            if '_edit' in request.POST:
+                change_form.save()
+                message['type'] = "success"
                 message['brief'] = "Success"
-                message['type'] = "info"
-                message['main'] = "This report has been deleted:"
-            change_form = CustomReportChangeForm(request.POST, instance=rep)
-            if change_form.is_valid():
-                if '_try_delete' in request.POST:
-                    #rep.delete()
-                    print("DELETING")
-                    message['type'] = "danger"
-                    message['brief'] = "Warning"
-                    message['main'] = "Are you sure you want to delete this report?"
-                    message['need_confirm'] = True
-                if '_edit' in request.POST:
-                    change_form.save()
-                    message['type'] = "success"
-                    message['brief'] = "Success"
-                    message['main'] = "This report has been updated:"
-                    # return render(request, "manage_user.html",{'message':})
-            else:
-                message['type'] = "warning"
-                message['brief'] = "Error"
-                message['main'] = "There is some error processing your request..."
-        for report in Report.objects.all():
-            if report.reporter == request.user:
-                form = CustomReportChangeForm(instance=report)
-                reports.append(form)
-        return render(request, 'my_reports.html', {'reports': reports, 'message': message})
+                message['main'] = "This report has been updated:"
+                # return render(request, "manage_user.html",{'message':})
+        else:
+            message['type'] = "warning"
+            message['brief'] = "Error"
+            message['main'] = "There is some error processing your request..."
+    for report in Report.objects.all():
+        if report.reporter == request.user:
+            form = CustomReportChangeForm(instance=report)
+            reports.append(form)
+    return render(request, 'my_reports.html', {'reports': reports, 'message': message})
