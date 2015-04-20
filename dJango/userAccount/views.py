@@ -3,7 +3,9 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, Group
+from uploadFile.models import Report
 from django.contrib import auth
+from uploadFile.forms import CustomReportChangeForm
 
 from .forms import CreateAccountForm, LoginForm, GroupCreationForm, AddUserToGroupForm
 
@@ -186,3 +188,31 @@ def my_groups(request):
 
     return render(request, 'my_groups.html',
                   {'form_list': form_list, 'add_user_form': add_user_form, 'message': message})
+
+
+def manage_reports(request):
+    reports = []
+    message = {}
+    if request.method == 'POST':
+        rep = Report.objects.get(title=request.POST.get("title", ""))
+        message['rep_name'] = rep.title
+        if '_confirm_delete' in request.POST:
+            rep.delete()
+            message['brief'] = "Success"
+            message['type'] = "info"
+            message['main'] = "This report has been deleted:"
+        change_form = CustomReportChangeForm(request.POST, instance=rep)
+        if change_form.is_valid():
+            if '_try_delete' in request.POST:
+                message['type'] = "danger"
+                message['brief'] = "Warning"
+                message['main'] = "Are you sure you want to delete this report?"
+                message['need_confirm'] = True
+        else:
+            message['type'] = "warning"
+            message['brief'] = "Error"
+            message['main'] = "There is some error processing your request..."
+    for report in Report.objects.all():
+        form = CustomReportChangeForm(instance=report)
+        reports.append(form)
+    return render(request, 'manage_reports.html', {'reports': reports, 'message': message})
