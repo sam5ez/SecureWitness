@@ -45,5 +45,10 @@ class CustomReportChangeForm(ModelForm):
         fields = ['title', 'short_desc', 'detailed_desc', 'location', 'tag', 'private', 'groups']
         widgets = {
             'groups': forms.CheckboxSelectMultiple(),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            "short_desc": forms.Textarea(attrs={'class': 'form-control'}),
+            "detailed_desc": forms.Textarea(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control'}),
+            'tag': forms.TextInput(attrs={'class': 'form-control'}),
             'username': forms.HiddenInput()
         }
