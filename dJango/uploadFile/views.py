@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 from .models import Report
 from .forms import ReportForm, SearchForm, CustomReportChangeForm
 from django.contrib import auth
 
 
+
 def upload_file(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         # form.reporter = request.user
@@ -26,6 +30,8 @@ def upload_file(request):
 
 
 def search_file(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -48,6 +54,8 @@ def search_file(request):
 
 
 def my_reports(request):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/user_home/')
         reports = []
         message = {}
         if request.method == 'POST':

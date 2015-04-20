@@ -48,10 +48,14 @@ def auth_view(request):
 
 
 def user_home(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/auth/')
     return render(request, 'user_home.html', {'user': request.user})
 
 
 def logout(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if request.user.is_authenticated():
         auth.logout(request)
         return render(request, "user_auth.html", {'form': LoginForm(), 'message': 'Successfully logged out.'})
@@ -63,6 +67,8 @@ from .forms import CustomUserChangeForm, CustomGroupChangeForm
 
 
 def manage_user(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if not request.user.is_staff:
         return render(request, "user_home.html", {'user': request.user})
     else:
@@ -106,6 +112,8 @@ def manage_user(request):
 
 
 def manage_group(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     if not request.user.is_staff:
         return render(request, "user_home.html", {'user': request.user})
     else:
@@ -160,6 +168,8 @@ def manage_group(request):
 
 
 def my_groups(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/user_home/')
     message = {}
     if request.method == 'POST':
         gp_name = request.POST.get('name', '')
