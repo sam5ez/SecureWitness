@@ -76,3 +76,37 @@ class GroupCreationForm(ModelForm):
     class Meta:
         model = Group
         fields = ['name']
+
+
+class AddUserToGroupForm(ModelForm):
+    user_list = forms.ModelMultipleChoiceField(queryset=User.objects.all(),
+                                               widget=FilteredSelectMultiple('Users', False),
+                                               required=False)
+    user_to_be_added = forms.CharField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        if instance is not None:
+            initial = kwargs.get('initial', {})
+            initial['user_list'] = instance.user_set.all()
+            kwargs['initial'] = initial
+        super(AddUserToGroupForm, self).__init__(*args, **kwargs)
+
+    def save(self, **kwargs):
+        group = super(AddUserToGroupForm, self).save()
+        try:
+            u = User.objects.get(username=self.cleaned_data['user_to_be_added'])
+        except User.DoesNotExist:
+            u = None
+        if u is not None:
+            group.user_set.add(u)
+            return group
+        else:
+            return None
+
+    class Meta:
+        model = Group
+        fields = ['name']
+        widgets = {
+            'name': forms.HiddenInput()
+        }

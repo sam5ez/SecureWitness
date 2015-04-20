@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, Group
 from django.contrib import auth
 
-from .forms import CreateAccountForm, LoginForm, GroupCreationForm
+from .forms import CreateAccountForm, LoginForm, GroupCreationForm, AddUserToGroupForm
 
 
 def create_account(request):
@@ -155,3 +155,34 @@ def manage_group(request):
         return render(request, "manage_group.html",
                       {'form_list': form_list, 'message': message, 'user': request.user,
                        'group_creation_form': GroupCreationForm()})
+
+
+def my_groups(request):
+    message = {}
+    if request.method == 'POST':
+        gp_name = request.POST.get('name', '')
+        group = Group.objects.get(name=gp_name)
+        add_user_form = AddUserToGroupForm(request.POST, instance=group)
+        if add_user_form.is_valid():
+            # user_to_be_added = User.objects.get(username=add_user_form.cleaned_data['user_to_be_added'])
+            # g = Group.objects.get(name=add_user_form.cleaned_data['group'])
+            g = add_user_form.save()
+            if g is not None:
+                message['type'] = "success"
+                message['brief'] = "Success"
+                message['main'] = "Successfully added the user to the group or the user is already in the group."
+            else:
+                message['type'] = "warning"
+                message['brief'] = "Fail"
+                message['main'] = "OH! Please try again and make sure you enter the correct username."
+
+    else:
+        add_user_form = AddUserToGroupForm()
+    form_list = []
+
+    for group in request.user.groups.all():
+        form = AddUserToGroupForm(instance=group)
+        form_list.append(form)
+
+    return render(request, 'my_groups.html',
+                  {'form_list': form_list, 'add_user_form': add_user_form, 'message': message})
