@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.forms.extras.widgets import SelectDateWidget
+from django.contrib.auth.models import User,Group
 
 from .models import Report
 
@@ -26,6 +27,11 @@ class ReportForm(ModelForm):
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'tag': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        uploader = User.objects.get(username=kwargs.pop('uploader'))
+        super(ReportForm, self).__init__(*args, **kwargs)
+        self.fields['groups'].queryset = uploader.groups
 
 
 class SearchForm(forms.Form):

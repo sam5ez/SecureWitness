@@ -10,7 +10,7 @@ def upload_file(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
-        form = ReportForm(request.POST, request.FILES)
+        form = ReportForm(request.POST, request.FILES, uploader=request.user)
         # form.reporter = request.user
         if form.is_valid():
             # file is saved
@@ -23,7 +23,7 @@ def upload_file(request):
             context = {'success': False, 'form': form}
         return render(request, 'report_upload_result.html', context)
     else:
-        form = ReportForm()
+        form = ReportForm(uploader=request.user)
     return render(request, 'report_upload.html', {'form': form})
 
 
@@ -69,7 +69,7 @@ def my_reports(request):
         change_form = CustomReportChangeForm(request.POST, instance=rep)
         if change_form.is_valid():
             if '_try_delete' in request.POST:
-                #rep.delete()
+                # rep.delete()
                 print("DELETING")
                 message['type'] = "danger"
                 message['brief'] = "Warning"
