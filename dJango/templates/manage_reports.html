@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Report List</h1>
+            {% if message %}
+            <div class="alert alert-{{ message.type }} alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <p><strong>{{ message.brief }}</strong> {{ message.main }} <em>{{ message.obj_name }}</em></p>
+                {% if message.need_confirm %}
+                    <p>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="title" value="{{ message.rep_name }}"/>
+                        <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
+                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+        <table class="table table-hover">
+            <tr>
+                <th>Report</th>
+                <th>Description</th>
+
+            </tr>
+            {% for report in reports %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <tr>
+                            <td>{{ report.title.value }}</td>
+                            <td>{{ report.short_desc.value }}</td>
+                                    <td><input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
+                        </tr>
+                        <input type="hidden" name="title" value="{{ report.title.value }}"/>
+                    </form>
+
+            {% endfor %}
+        </table>
+{% endblock %}
