@@ -10,20 +10,17 @@ def upload_file(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/user_home/')
     if request.method == 'POST':
-        form = ReportForm(request.POST, request.FILES, uploader=request.user)
+        form = ReportForm(request.POST, request.FILES, reporter=request.user)
         # form.reporter = request.user
         if form.is_valid():
             # file is saved
-            form_2 = form.save(commit=False)  # using commit=False will fail to save manytomany fields
-            form_2.reporter = request.user
-            form_2.save()
-            form.save_m2m()
+            form.save()
             context = {'success': True, 'form': form}
         else:
             context = {'success': False, 'form': form}
         return render(request, 'report_upload_result.html', context)
     else:
-        form = ReportForm(uploader=request.user)
+        form = ReportForm(reporter=request.user)
     return render(request, 'report_upload.html', {'form': form})
 
 

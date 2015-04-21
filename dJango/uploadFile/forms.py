@@ -2,7 +2,6 @@ from django import forms
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from django.forms.extras.widgets import SelectDateWidget
-from django.contrib.auth.models import User,Group
 
 from .models import Report
 
@@ -12,7 +11,7 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ['title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag', 'private', 'groups']
+        fields = ['reporter', 'title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag', 'private', 'groups']
         labels = {
             "short_desc": _("Short Description"),
             "detailed_desc": _("Detailed Description"),
@@ -20,6 +19,7 @@ class ReportForm(ModelForm):
             "groups": _("Specify which group(s) can see the report")
         }
         widgets = {
+            'reporter': forms.HiddenInput(),
             'groups': forms.CheckboxSelectMultiple(),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             "short_desc": forms.Textarea(attrs={'class': 'form-control'}),
@@ -29,9 +29,10 @@ class ReportForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        uploader = User.objects.get(username=kwargs.pop('uploader'))
+        reporter = kwargs.pop('reporter')
         super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['groups'].queryset = uploader.groups
+        self.fields['reporter'].initial = reporter
+        self.fields['groups'].queryset = reporter.groups
 
 
 class SearchForm(forms.Form):
