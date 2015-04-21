@@ -57,5 +57,8 @@ class CustomReportChangeForm(ModelForm):
             "detailed_desc": forms.Textarea(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'tag': forms.TextInput(attrs={'class': 'form-control'}),
-            'username': forms.HiddenInput()
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomReportChangeForm, self).__init__(*args, **kwargs)
+        self.fields['groups'].queryset = self.instance.reporter.groups

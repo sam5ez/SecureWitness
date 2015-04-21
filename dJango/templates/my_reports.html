@@ -1,34 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>{{ user.username }}'s Reports</h1>
-            {% if message %}
-            <div class="alert alert-{{ message.type }} alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <p><strong>{{ message.brief }}</strong> {{ message.main }} <em>{{ message.obj_name }}</em></p>
-                {% if message.need_confirm %}
-                    <p>
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="title" value="{{ message.rep_name }}"/>
-                        <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
-                        <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
-                    </form>
-                {% endif %}
-            </div>
-        {% endif %}
-            {% for report in reports %}
+    {% if message %}
+        <div class="alert alert-{{ message.type }} alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <p><strong>{{ message.brief }}</strong> {{ message.main }} <em>{{ message.obj_name }}</em></p>
+            {% if message.need_confirm %}
+                <p>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="title" value="{{ message.rep_name }}"/>
+                    <input type="submit" name="_confirm_delete" class="btn btn-danger" value="Confirm deletion"/>
+                    <input type="button" class="btn btn-default" value="Cancel" data-dismiss="alert"/>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% for report in reports %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <h2>{{ report.title.value }}</h2>
+            <td>{{ report.as_p }}</td>
+            <td><input type="submit" name="_edit" value="Save" class="btn btn-primary"/>
+                <input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
+            <input type="hidden" name="title" value="{{ report.title.value }}"/>
+        </form>
 
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <tr>
-                            <h2>{{ report.title.value }}</h2>
-                            <td>{{ report.as_p }}</td>
-                                <td><input type="submit" name="_edit" value="Save" class="btn btn-primary"/>
-                                    <input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
-                        </tr>
-                        <input type="hidden" name="title" value="{{ report.title.value }}"/>
-                    </form>
-
-            {% endfor %}
+    {% endfor %}
 {% endblock %}
