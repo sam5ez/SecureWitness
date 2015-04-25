@@ -20,9 +20,9 @@ class ReportForm(ModelForm):
             "short_desc": _("Short Description"),
             "detailed_desc": _("Detailed Description"),
             "location": _("Where did it happened"),
-            # "event_date": _("When did it happened"),
+            "event_date": _("When did it happened"),
             "private": _("Mark as private (only specified group and I can see the report)"),
-            "groups": _("Specify which group(s) can see the report")
+            "groups": _("Specify which group(s) can see the report (only groups you are in are shown)")
         }
         widgets = {
             'reporter': forms.HiddenInput(),
