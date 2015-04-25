@@ -3,10 +3,10 @@ import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User, Group
-from uploadFile.models import Report
 from django.contrib import auth
-from uploadFile.forms import CustomReportChangeForm
 
+from uploadFile.models import Report
+from uploadFile.forms import CustomReportChangeForm
 from .forms import CreateAccountForm, LoginForm, GroupCreationForm, AddUserToGroupForm
 
 
@@ -226,3 +226,21 @@ def manage_reports(request):
         form = CustomReportChangeForm(instance=report)
         reports.append(form)
     return render(request, 'manage_reports.html', {'reports': reports, 'message': message})
+
+
+from django.contrib.auth.forms import PasswordChangeForm
+
+
+def change_password(request):
+    message = ""
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Password is successfully changed."
+        else:
+            pass
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, 'password_change.html', {'form': form, 'message': message})

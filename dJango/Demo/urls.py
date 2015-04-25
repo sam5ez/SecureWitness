@@ -4,7 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from uploadFile.views import upload_file, search_file, my_reports
-from userAccount.views import create_account, auth_view, user_home, logout, manage_user, manage_group, my_groups, manage_reports
+from userAccount.views import create_account, auth_view, user_home, logout, manage_user, manage_group, my_groups, \
+    manage_reports, change_password
 
 
 urlpatterns = patterns('',
@@ -22,5 +23,6 @@ urlpatterns = patterns('',
                        url(r'^manage_group/$', manage_group),
                        url(r'^manage_reports/$', manage_reports),
                        url(r'^my_reports/$', my_reports),
-                       url(r'^my_groups/$', my_groups)
+                       url(r'^my_groups/$', my_groups),
+                       url(r'^change_password/$', change_password),
                        ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
