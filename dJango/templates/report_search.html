@@ -2,7 +2,10 @@
 
 {% block content %}
     <h1>Search Report by Fields</h1>
-    <form enctype="multipart/form-data" method="post">
+    <br>
+    <h4>To see all reports available to you, click the submit button without entering anything.</h4>
+    <br>
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <p>{% include "submit_button" %}</p>

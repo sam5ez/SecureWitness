@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
     <h1>Search Result</h1>
     {% if valid %}
@@ -12,6 +11,7 @@
                 <th>Location</th>
                 <th>Tag</th>
                 <th>Groups</th>
+                <th>Detail</th>
                 {% for report in report_list %}
                     <tr>
                         <td><a href={{ report.file.url }}>{{ report.title }}</a></td>
@@ -22,6 +22,9 @@
                         <td>{{ report.tag }}</td>
                         <td>
                             {{ report.groups.all }}
+                        </td>
+                        <td>
+                            <a href="/view_report/{{ report.id }}/">view</a>
                         </td>
                     </tr>
                 {% endfor %}

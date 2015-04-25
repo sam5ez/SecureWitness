@@ -241,7 +241,7 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            message = "Password is successfully changed."
+            message = "Password is successfully changed. You will be logged out shortly. Please login again using you new password."
         else:
             pass
     else:

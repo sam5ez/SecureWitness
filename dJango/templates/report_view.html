@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ report.title }}</h1>
+    <table class="table table-hover">
+        <tr>
+            <td>Reporter</td>
+            <td>{{ report.reporter }}</td>
+        </tr>
+        <tr>
+            <td>Reported Time</td>
+            <td>{{ report.sub_date }}</td>
+        </tr>
+        <tr>
+            <td>Keywords</td>
+            <td>{{ report.tag }}</td>
+        </tr>
+        <tr>
+            <td>When</td>
+            <td>{{ report.sub_date }}</td>
+        </tr>
+        <tr>
+            <td>Where</td>
+            <td>{{ report.location }}</td>
+        </tr>
+        <tr>
+            <td>Short Description</td>
+            <td>{{ report.short_desc }}</td>
+        </tr>
+        <tr>
+            <td>Detailed Description</td>
+            <td>{{ report.detailed_desc }}</td>
+        </tr>
+        <tr>
+            <td>File</td>
+            <td><a href="{{ report.file.url }}">Click here to download</a></td>
+        </tr>
+    </table>
+{% endblock %}

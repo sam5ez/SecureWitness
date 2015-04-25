@@ -2,16 +2,14 @@
 {% block content %}
     <h1>{{ user.username }}'s Home Page</h1>
     {% if user.is_staff %}
-        You are an admin.
+        <h4>You are an administrator. Here is a list of what you can do:</h4>
         <ul>
             {% include 'list_of_admin_user_operation.html' %}
         </ul>
     {% else %}
-        <p>You are a normal user.</p>
+        <h4>You are a normal user. Here is a list of what you can do:</h4>
         <ul>
             {% include 'list_of_normal_user_operation.html' %}
-            <li>Manage Report (create folder, delete report, etc.)</li>
-            <li>Other things in user requirement</li>
         </ul>
     {% endif %}
 {% endblock %}

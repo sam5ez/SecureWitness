@@ -82,3 +82,24 @@ def my_reports(request):
             form = CustomReportChangeForm(instance=report)
             reports.append(form)
     return render(request, 'my_reports.html', {'reports': reports, 'message': message})
+
+
+def report_view(request, id):
+    try:
+        rpt = Report.objects.get(pk=id)
+    except Report.DoesNotExist:
+        return HttpResponseRedirect('/user_home/')
+    if have_access_to_report(requester=request.user, report=rpt):
+        return render(request, 'report_view.html', {'report': rpt})
+    else:
+        return HttpResponseRedirect('/user_home/')
+
+
+def have_access_to_report(requester, report):
+    if (report.reporter == requester) | (not report.private):
+        return True
+    for group in report.groups.all():
+        if group in requester.groups.all():
+            return True
+    return False
+

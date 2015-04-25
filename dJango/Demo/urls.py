@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from uploadFile.views import upload_file, search_file, my_reports
+from uploadFile.views import upload_file, search_file, my_reports, report_view
 from userAccount.views import create_account, auth_view, user_home, logout, manage_user, manage_group, my_groups, \
     manage_reports, change_password
 
@@ -15,6 +15,7 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^upload/$', upload_file),
                        url(r'^search/$', search_file),
+                       url(r'^view_report/(?P<id>[0-9]+)/$', report_view),
                        url(r'^create_account/$', create_account),
                        url(r'^auth/$', auth_view),
                        url(r'^user_home/$', user_home),
