@@ -11,8 +11,8 @@
             <td>{{ report.sub_date }}</td>
         </tr>
         <tr>
-            <td>Keywords</td>
-            <td>{{ report.tag }}</td>
+            <td>Tags</td>
+            <td>{% for t in report.tags.all %}{{ t }} {% endfor %}</td>
         </tr>
         <tr>
             <td>When</td>

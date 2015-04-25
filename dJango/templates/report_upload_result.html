@@ -6,7 +6,21 @@
         <p>Submitted {% now "F j, Y H:i" %}</p>
         Return to <a href="/upload/">upload</a> page.
     {% else %}
-        <h1>Fail to save report {{ form.title.value }}</h1>
+        <div style="float: right">
+            <form method="POST" class="form">
+                {% csrf_token %}
+                {{ add_tag_form.as_p }}
+                <button type="button" class="btn btn-danger" data-container="body" data-toggle="popover"
+                        data-placement="bottom"
+                        data-content="Please add new tags before you start writing the report. All you write will be lost when adding the new tag.">
+                    <em>!</em>
+                </button>
+                <input type="submit" name="add_tag" value="Add New Tag" class="btn btn-success"/>
+            </form>
+        </div>
+
+        <h1>Upload Report</h1>
+
         <form enctype="multipart/form-data" method="post" class="form">
             {% csrf_token %}
             {% for field in form %}

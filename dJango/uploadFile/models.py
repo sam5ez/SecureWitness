@@ -9,10 +9,11 @@ class Report(models.Model):
     title = models.CharField(max_length=30)
     sub_date = models.DateTimeField(auto_now_add=True, auto_created=True)
     short_desc = models.TextField(max_length=30, blank=True)  # blank=True: allow empty string
+    event_date = models.DateField(null=True, blank=True)
     detailed_desc = models.TextField(max_length=100, blank=True)
     location = models.CharField(max_length=30, blank=True)
     file = models.FileField(upload_to="reports")
-    tag = models.CharField(max_length=30, blank=True)
+    tags = models.ManyToManyField('Tag', blank=True)
     private = models.BooleanField(default=True)
     groups = models.ManyToManyField(Group, blank=True)
 
@@ -24,3 +25,15 @@ class Report(models.Model):
             return "<a href='%s'>download</a>" % (self.file.url,)
         else:
             return "No attachment"
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
+class Comment(models.Model):
+    report = models.ForeignKey(Report)
+    date = models.DateTimeField(auto_now_add=True, auto_created=True)

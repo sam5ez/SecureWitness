@@ -3,25 +3,32 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 
 from .models import Report
-from .forms import ReportForm, SearchForm, CustomReportChangeForm
+from .forms import ReportForm, SearchForm, CustomReportChangeForm, AddTagForm
 
 
 def upload_file(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/auth/')
     if request.method == 'POST':
+        if "add_tag" in request.POST:
+            f = AddTagForm(request.POST)
+            if f.is_valid():
+                f.save()
+            return render(request, 'report_upload_result.html',
+                          {'form': ReportForm(reporter=request.user), 'add_tag_form': AddTagForm()})
+
         form = ReportForm(request.POST, request.FILES, reporter=request.user)
         # form.reporter = request.user
         if form.is_valid():
             # file is saved
             form.save()
-            context = {'success': True, 'form': form}
+            context = {'success': True, 'form': form, 'add_tag_form': AddTagForm()}
         else:
-            context = {'success': False, 'form': form}
+            context = {'success': False, 'form': form, 'add_tag_form': AddTagForm()}
         return render(request, 'report_upload_result.html', context)
     else:
         form = ReportForm(reporter=request.user)
-    return render(request, 'report_upload.html', {'form': form})
+    return render(request, 'report_upload_result.html', {'form': form, 'add_tag_form': AddTagForm()})
 
 
 def search_file(request):
@@ -34,10 +41,10 @@ def search_file(request):
             title = form.cleaned_data['title']
             desc = form.cleaned_data['description']
             loc = form.cleaned_data['location']
-            tag = form.cleaned_data['tag']
+            # tag = form.cleaned_data['tags']
             r_list = Report.objects.filter(title__icontains=title).filter(
                 Q(short_desc__icontains=desc) | Q(detailed_desc__icontains=desc)).filter(
-                location__icontains=loc).filter(tag__icontains=tag).filter(
+                location__icontains=loc).filter(
                 Q(reporter__exact=request.user) | Q(private=False) | Q(groups__in=request.user.groups.all())).distinct()
             context = {'report_list': r_list, 'valid': True}
         else:

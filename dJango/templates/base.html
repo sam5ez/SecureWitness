@@ -6,8 +6,15 @@
     <title>Secure Witness</title>
     <link rel="stylesheet" type='text/css' href="{{ MEDIA_URL }}bootstrap.css"/>
     <script src="{{ MEDIA_URL }}jquery-2.1.3.min.js"></script>
+
     <script src="{{ MEDIA_URL }}bootstrap.min.js"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('[data-toggle="popover"]').popover()
+        });
+    </script>
     <script src="{{ MEDIA_URL }}jquery.init.js"></script>
+
 </head>
 <body>
 <div class="container-fluid">
@@ -39,4 +46,5 @@
 </div>
 
 </body>
+
 </html>

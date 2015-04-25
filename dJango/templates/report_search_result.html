@@ -7,22 +7,18 @@
                 <th>Title</th>
                 <th>Submission Date</th>
                 <th>Short Description</th>
-                <th>Detailed Description</th>
                 <th>Location</th>
                 <th>Tag</th>
                 <th>Groups</th>
-                <th>Detail</th>
+                <th>Detailed Info</th>
                 {% for report in report_list %}
                     <tr>
                         <td><a href={{ report.file.url }}>{{ report.title }}</a></td>
                         <td>{{ report.sub_date }}</td>
                         <td>{{ report.short_desc }}</td>
-                        <td>{{ report.detailed_desc }}</td>
                         <td>{{ report.location }}</td>
-                        <td>{{ report.tag }}</td>
-                        <td>
-                            {{ report.groups.all }}
-                        </td>
+                        <td>{% for t in report.tags.all %}{{ t }} {% endfor %}</td>
+                        <td>{% for g in report.groups.all %} {{ g }} {% endfor %}</td>
                         <td>
                             <a href="/view_report/{{ report.id }}/">view</a>
                         </td>
