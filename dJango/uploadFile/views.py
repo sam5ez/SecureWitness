@@ -8,7 +8,7 @@ from .forms import ReportForm, SearchForm, CustomReportChangeForm
 
 def upload_file(request):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/user_home/')
+        return HttpResponseRedirect('/auth/')
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES, reporter=request.user)
         # form.reporter = request.user
@@ -26,7 +26,7 @@ def upload_file(request):
 
 def search_file(request):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/user_home/')
+        return HttpResponseRedirect('/auth/')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -50,7 +50,7 @@ def search_file(request):
 
 def my_reports(request):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/user_home/')
+        return HttpResponseRedirect('/auth/')
     reports = []
     message = {}
     if request.method == 'POST':
