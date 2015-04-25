@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from .models import Report, Tag
+from .models import *
 
 
 class ReportForm(ModelForm):
@@ -79,3 +79,31 @@ class AddTagForm(ModelForm):
         labels = {
             "name": _("new tag")
         }
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['author', 'report', 'content']
+        labels = {
+            "content": _("New comment"),
+            "author": _("Commenter")
+        }
+        widgets = {
+            'author': forms.HiddenInput(),
+            'report': forms.HiddenInput(),
+            'content': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('at')
+        rpt = kwargs.pop('report')
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['author'].initial = user
+        self.fields['report'].initial = rpt
+        self.fields['anonymous'] = forms.BooleanField(widget=forms.CheckboxInput(), required=False, initial=False)
+
+    def __save__(self, commit=True):
+        cmt = super(CommentForm, self).save(commit=commit)
+        return cmt
+

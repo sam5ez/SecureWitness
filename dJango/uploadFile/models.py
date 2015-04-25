@@ -36,4 +36,17 @@ class Tag(models.Model):
 
 class Comment(models.Model):
     report = models.ForeignKey(Report)
+    content = models.TextField(max_length=300)
+    author = models.ForeignKey(User, default=None, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True, auto_created=True)
+
+
+    def get_author(self):
+        if self.author is None:
+            return "Anonymous"
+        else:
+            return self.author.username
+
+    def __str__(self):
+        return self.content + "\nby " + self.get_author() + "\n@ " + str(self.date.date()) + " " + str(
+            self.date.hour)

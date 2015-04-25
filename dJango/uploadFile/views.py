@@ -1,9 +1,10 @@
 from django.shortcuts import render
+
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 
-from .models import Report
-from .forms import ReportForm, SearchForm, CustomReportChangeForm, AddTagForm
+from .models import Report, Comment
+from .forms import ReportForm, SearchForm, CustomReportChangeForm, AddTagForm, CommentForm
 
 
 def upload_file(request):
@@ -97,7 +98,25 @@ def report_view(request, id):
     except Report.DoesNotExist:
         return HttpResponseRedirect('/user_home/')
     if have_access_to_report(requester=request.user, report=rpt):
-        return render(request, 'report_view.html', {'report': rpt})
+        message = ""
+        if request.method == 'POST':
+            form = CommentForm(data=request.POST, at=request.user, report=rpt)
+            if form.is_valid():
+                if form.cleaned_data['anonymous']:
+                    f = form.save(commit=False)
+                    f.author = None
+                    f.save()
+                    message = "Comment added by Anonymous."
+                else:
+                    form.save()
+                    message = "Comment added by " + request.user.username + "."
+            else:
+                message = "Comment fails to save."
+        else:
+            form = CommentForm(at=request.user, report=rpt)
+        comments = Comment.objects.filter(report__exact=rpt)
+        return render(request, 'report_view.html',
+                      {'report': rpt, 'comments': comments, 'cmt_form': form, 'message': message})
     else:
         return HttpResponseRedirect('/user_home/')
 

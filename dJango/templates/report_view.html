@@ -35,4 +35,36 @@
             <td><a href="{{ report.file.url }}">Click here to download</a></td>
         </tr>
     </table>
+    <h2>Comments:</h2>
+    {% if message %}
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <p>{{ message }}</p>
+        </div>
+    {% endif %}
+    <table class="table table-hover">
+        {% for c in comments %}
+            <tr>
+                <td>{{ c.content }}</td>
+                <td>{{ c.get_author }}</td>
+                <td>{{ c.date }}</td>
+            </tr>
+        {% endfor %}
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ cmt_form.author }}{{ cmt_form.report }}
+            <tr>
+                <td>
+                    {{ cmt_form.content }}
+                    {% for e in cmt_form.content.errors %}{{ e }}{% endfor %}{{ cmt_form.content.error }}</td>
+
+                <td>{{ cmt_form.anonymous }} {{ cmt_form.anonymous.label }}
+                    {% for e in cmt_form.anonymous.errors %}{{ e }}{% endfor %}{{ cmt_form.anonymous.error }}</td>
+
+                <td>{% include "submit_button" %}</td>
+            </tr>
+        </form>
+    </table>
+
 {% endblock %}
