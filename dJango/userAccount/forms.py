@@ -30,7 +30,7 @@ class LoginForm(ModelForm):
 class CustomUserChangeForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'is_staff', 'groups']
+        fields = ['username', 'is_staff', 'is_active', 'groups']
         widgets = {
             'groups': forms.CheckboxSelectMultiple(),
             'username': forms.HiddenInput()

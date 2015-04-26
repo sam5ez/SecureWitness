@@ -38,8 +38,11 @@ def auth_view(request):
         user = auth.authenticate(username=username, password=password)
 
         if user is not None:
-            auth.login(request, user)
-            return HttpResponseRedirect('/user_home/')
+            if user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect('/user_home/')
+            else:
+                message = 'Account suspended.'
         else:
             message = 'Authentication fail.'
     else:

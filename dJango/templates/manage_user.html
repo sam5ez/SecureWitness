@@ -24,6 +24,7 @@
             <tr>
                 <th>Username</th>
                 <th>Is Admin</th>
+                <th>Is Active</th>
                 <th>Groups</th>
                 <th>Actions</th>
             </tr>
@@ -33,7 +34,7 @@
                     <tr>
                         <td> {{ form.username.value }}{{ form.username }}</td>
                         <td>{{ form.is_staff }}</td>
-                        {#                        <td>{% for g in form.groups %}{{ g }}{% endfor %}</td>#}
+                        <td>{{ form.is_active }}</td>
                         <td>{{ form.groups }}</td>
                         <td><input type="submit" name="_edit" value="Save" class="btn btn-primary"/>
                             <input type="submit" name="_try_delete" value="Delete" class="btn btn-danger"/></td>
