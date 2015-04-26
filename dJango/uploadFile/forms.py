@@ -57,14 +57,16 @@ class SearchForm(forms.Form):
 class CustomReportChangeForm(ModelForm):
     class Meta:
         model = Report
-        fields = ['title', 'short_desc', 'detailed_desc', 'location', 'tags', 'private', 'groups']
+        fields = ['title', 'short_desc', 'detailed_desc', 'location', 'tags', 'private', 'groups', 'event_date']
         widgets = {
             'groups': forms.CheckboxSelectMultiple(),
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             "short_desc": forms.Textarea(attrs={'class': 'form-control'}),
             "detailed_desc": forms.Textarea(attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'tags': forms.TextInput(attrs={'class': 'form-control'}),
+            'tags': FilteredSelectMultiple('Tags', False),
+            'event_date': SelectDateWidget(years=range(1900, datetime.today().year)),
+
         }
 
     def __init__(self, *args, **kwargs):
