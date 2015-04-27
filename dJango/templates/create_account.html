@@ -1,10 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Create an Account</h1>
-<form method="post" class="form-inline">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p>{% include "submit_button" %}</p>
-</form>
-
+    <h1>Create an Account</h1>
+    {% if message %}
+        <div class="alert alert-info alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+    {% endif %}
+    <form method="post" class="form-inline">
+        {% csrf_token %}
+        <table class="table">
+            {% for field in form %}
+                <tr>
+                    <td>{{ field.label }}</td>
+                    <td>{{ field }}</td>
+                    <td>{% for e in field.errors %}{{ e }}{% endfor %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>{% include "submit_button" %}</p>
+    </form>
 {% endblock %}

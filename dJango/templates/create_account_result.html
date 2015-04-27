@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if succeed %}
-        <h1>Account {{ username }} is created. </h1>
-        <p><a href="/auth/">Login</a></p>
-    {% else %}
-        <h1>Account Creation fail.</h1>
-    {% endif %}
+
+    <h1>Account {{ username }} is successfully created. </h1>
+    <h4><a href="/auth/">Login</a></h4>
+
 {% endblock %}

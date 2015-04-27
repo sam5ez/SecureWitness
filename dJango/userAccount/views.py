@@ -23,12 +23,14 @@ def create_account(request):
                                             last_name=last_name)
             if not user.last_login:
                 user.last_login = datetime.datetime.now()
-            context = {'username': username, 'succeed': True}
+            message = "Account creation succeed."
+            return render(request, "create_account_result.html", {'username': username})
         else:
-            context = {'form': form, 'succeed': False}
-        return render(request, "create_account_result.html", context)
+            message = "Account creation fail. Please check the error and try again."
     else:
-        return render(request, "create_account.html", {'form': CreateAccountForm()})
+        form = CreateAccountForm()
+        message = ""
+    return render(request, "create_account.html", {'form': form, 'message': message})
 
 
 def auth_view(request):
